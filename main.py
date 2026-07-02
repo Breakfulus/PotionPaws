@@ -1,5 +1,6 @@
 import pygame
 from projectile import Projectile
+from enemy import Enemy
 
 # pygame setup
 pygame.init()
@@ -13,12 +14,21 @@ bullets = []
 bullet_count = 0
 timer_list = []
 
+TEMP_ENEMY = {
+    "image": None,
+    "health": 10,
+    "damage": 10,
+    "speed": 1
+}
+
 TEMP = {
     "image": None,
     "lifetime": 1,
     "damage": 10,
     "speed": 8
 }
+
+new_enemy = Enemy(TEMP_ENEMY, (1, 1))
 
 while running:
     # Events loop
@@ -58,6 +68,8 @@ while running:
             proj.draw(screen)
         else:
             bullets.remove(proj)
+    
+    new_enemy.draw(screen)
 
     pygame.display.flip()
     dt = clock.tick(60) / 1000
