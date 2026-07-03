@@ -4,6 +4,7 @@ class Enemy():
     def __init__(self, description, pos) -> None:
         self.pos = pygame.Vector2(pos)
         self.alive = True
+        self.rect = pygame.rect.Rect(pos[0], pos[1], 15, 15)
 
         self.health = description["health"]
         self.damage = description["damage"]
@@ -12,12 +13,15 @@ class Enemy():
 
     def update(self, player, dt):
         if self.alive:
+            if self.health <= 0:
+                self.alive = False
             direction = (player.pos - self.pos).normalize()
             self.velocity = direction * self.speed
 
             self.pos += self.velocity * dt
+            self.rect.center = self.pos
         else:
-             pass
+             self.pos = (0, 0)
     
     def draw(self, surf):
-        pygame.draw.circle(surf, "red", self.pos, 30)
+        pygame.draw.circle(surf, "red", self.rect.center, 30)

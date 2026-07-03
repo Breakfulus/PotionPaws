@@ -13,10 +13,11 @@ class Projectile:
         self.team = team
         # Rendering
         # self.image = description["image"]
-        # self.rect = self.image.get_rect(center=self.pos)
+        self.rect = pygame.rect.Rect(self.pos[0], self.pos[1], 15, 15)
     
     def update(self):
         self.pos += self.velocity
+        self.rect.center = self.pos
         if self.timer > 0:
             self.timer -= 1
         else:
@@ -24,4 +25,4 @@ class Projectile:
 
 
     def draw(self, surf):
-        pygame.draw.circle(surf, "red", self.pos, 15)
+        pygame.draw.circle(surf, "red", self.rect.center, 15)

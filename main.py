@@ -13,13 +13,10 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 
-bullets = []
-bullet_count = 0
-timer_list = []
-
+# Enemy, player, proj setup
 TEMP_ENEMY = {
     "image": None,
-    "health": 10,
+    "health": 50,
     "damage": 10,
     "speed": 150
 }
@@ -28,7 +25,7 @@ TEMP_PLAYER = {
     "image": None,
     "health": 10,
     "damage": 10,
-    "speed": 300
+    "speed": 170
 }
 
 TEMP = {
@@ -39,14 +36,13 @@ TEMP = {
 }
 
 enemies = []
+bullets = []
 
 SPAWN_ENEMY = pygame.USEREVENT + 1
 spawn_enemy_event = pygame.event.Event(SPAWN_ENEMY)
 pygame.time.set_timer(spawn_enemy_event, 1000)
 
 player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
-
-
 
 while running:
     # Events loop
@@ -65,10 +61,15 @@ while running:
             enemies.append(new_enemy)
             pygame.time.set_timer(spawn_enemy_event, 1000 * random.randint(1, 5))
         
-    # fill the screen
+    # Fill the screen
     screen.fill((26, 27, 33))
 
     for proj in bullets:
+        for enemy in enemies:
+            if proj.rect.colliderect(enemy.rect):
+                enemy.health -= proj.damage
+                projectile.alive = False
+
         if proj.alive:
             proj.update()
             proj.draw(screen)
@@ -79,8 +80,11 @@ while running:
     player.draw(screen)
 
     for enemy in enemies:
-        enemy.update(player, dt)
-        enemy.draw(screen)
+        if enemy.alive:
+            enemy.update(player, dt)
+            enemy.draw(screen)
+        else:
+            enemies.remove(enemy)
 
     pygame.display.flip()
     dt = clock.tick(60) / 1000
