@@ -1,11 +1,12 @@
 import pygame
+import consts as c
 from projectile import Projectile
 from enemy import Enemy
 from player import Player
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 running = True
 dt = 0
