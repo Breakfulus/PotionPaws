@@ -28,7 +28,7 @@ TEMP = {
     "speed": 8
 }
 
-new_enemy = Enemy(TEMP_ENEMY, (1, 1))
+new_enemy = Enemy(TEMP_ENEMY, (1, 1), None)
 
 while running:
     # Events loop
