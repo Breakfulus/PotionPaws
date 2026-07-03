@@ -1,5 +1,6 @@
 import pygame
 import consts as c
+import random
 from enemy_spawning import get_next_spawn_point
 from projectile import Projectile
 from enemy import Enemy
@@ -40,7 +41,8 @@ TEMP = {
 enemies = []
 
 SPAWN_ENEMY = pygame.USEREVENT + 1
-spawn_enemy_event = pygame.time.set_timer(SPAWN_ENEMY, 1000)
+spawn_enemy_event = pygame.event.Event(SPAWN_ENEMY)
+pygame.time.set_timer(spawn_enemy_event, 1000)
 
 player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
 
@@ -61,6 +63,7 @@ while running:
         if event.type == SPAWN_ENEMY:
             new_enemy = Enemy(TEMP_ENEMY, get_next_spawn_point())
             enemies.append(new_enemy)
+            pygame.time.set_timer(spawn_enemy_event, 1000 * random.randint(1, 5))
         
     # fill the screen
     screen.fill((26, 27, 33))
