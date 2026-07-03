@@ -1,5 +1,6 @@
 import pygame
 import consts as c
+from enemy_spawning import get_next_spawn_point
 from projectile import Projectile
 from enemy import Enemy
 from player import Player
@@ -36,10 +37,14 @@ TEMP = {
     "speed": 8
 }
 
+enemies = []
+
+SPAWN_ENEMY = pygame.USEREVENT + 1
+spawn_enemy_event = pygame.time.set_timer(SPAWN_ENEMY, 1000)
 
 player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
 
-new_enemy = Enemy(TEMP_ENEMY, (1, 1))
+
 
 while running:
     # Events loop
@@ -53,6 +58,10 @@ while running:
             projectile = Projectile(TEMP, player.pos, direction, "player")
             bullets.append(projectile)
         
+        if event.type == SPAWN_ENEMY:
+            new_enemy = Enemy(TEMP_ENEMY, get_next_spawn_point())
+            enemies.append(new_enemy)
+        
     # fill the screen
     screen.fill((26, 27, 33))
 
@@ -64,10 +73,11 @@ while running:
             bullets.remove(proj)
     
     player.update(dt)
-    new_enemy.update(player, dt)
-
     player.draw(screen)
-    new_enemy.draw(screen)
+
+    for enemy in enemies:
+        enemy.update(player, dt)
+        enemy.draw(screen)
 
     pygame.display.flip()
     dt = clock.tick(60) / 1000
