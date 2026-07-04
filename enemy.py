@@ -4,7 +4,7 @@ class Enemy():
     def __init__(self, description, pos) -> None:
         self.pos = pygame.Vector2(pos)
         self.alive = True
-        self.rect = pygame.rect.Rect(pos[0], pos[1], 15, 15)
+        self.rect = pygame.rect.Rect(pos[0], pos[1], 30, 30)
 
         self.health = description["health"]
         self.damage = description["damage"]

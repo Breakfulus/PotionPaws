@@ -23,7 +23,7 @@ TEMP_ENEMY = {
 
 TEMP_PLAYER = {
     "image": None,
-    "health": 10,
+    "health": 100,
     "damage": 10,
     "speed": 170
 }
@@ -76,11 +76,14 @@ while running:
         else:
             bullets.remove(proj)
     
-    player.update(dt)
-    player.draw(screen)
+    if player.alive:
+        player.update(dt)
+        player.draw(screen)
 
     for enemy in enemies:
-        if enemy.alive:
+        if enemy.alive and player.alive:
+            if enemy.rect.colliderect(player.rect):
+                player.health -= enemy.damage
             enemy.update(player, dt)
             enemy.draw(screen)
         else:
