@@ -11,12 +11,15 @@ from player import Player
 pygame.init()
 screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 clock = pygame.time.Clock()
+dt = 0
+
+# Game setup
 run_start = pygame.time.get_ticks()
 running = True
-STATE = 1
-dt = 0
+STATE = 0
 timer = 2 * 60
 
+# Define font
 font = pygame.freetype.Font("LGGothic.ttf", 30)
 
 # Enemy, player, proj setup
@@ -51,6 +54,21 @@ pygame.time.set_timer(spawn_enemy_event, 1000)
 player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
 
 while running:
+    if STATE == 0:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_j:
+                    STATE = 1
+            
+
+        # Fill the screen
+        screen.fill((50, 50, 150))
+
+        pygame.display.flip()
+        dt = clock.tick(60) / 1000
+
     if STATE == 1:
         # Events loop
         for event in pygame.event.get():
@@ -62,6 +80,10 @@ while running:
                 direction = (mouse_pos - player.pos).normalize()
                 projectile = Projectile(TEMP, player.pos, direction, "player")
                 bullets.append(projectile)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_j:
+                    STATE = 0
             
             if event.type == SPAWN_ENEMY:
                 new_enemy = Enemy(TEMP_ENEMY, get_next_spawn_point())

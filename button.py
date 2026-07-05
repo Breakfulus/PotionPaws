@@ -1,11 +1,10 @@
 import pygame
 
 class Button:
-    def __init__(self, description, pos):
+    def __init__(self, pos, rect, text):
         self.pos = pygame.Vector2(pos)
-
-        self.image = description["image"]
-        self.rect = self.image.get_rect(center=self.pos)
+        self.rect = rect
+        self.text = text
 
     def check_if_hovered(self):
         pass
@@ -16,5 +15,5 @@ class Button:
     def update(self):
         pass
 
-    def draw(self):
+    def draw(self, surf):
         pass
