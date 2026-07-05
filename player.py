@@ -2,10 +2,11 @@ import pygame
 
 class Player():
     def __init__(self, pos, preset) -> None:
+        self.preset = preset
         self.pos = pygame.Vector2(pos)
-        self.speed = preset["speed"]
-        self.damage = preset["damage"]
-        self.health = preset["health"]
+        self.speed = self.preset["speed"]
+        self.damage = self.preset["damage"]
+        self.health = self.preset["health"]
         self.alive = True
         self.rect = pygame.rect.Rect(pos[0], pos[1], 30, 30)
 
