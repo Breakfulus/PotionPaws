@@ -105,7 +105,8 @@ while running:
         elapsed = (pygame.time.get_ticks() - run_start) // 1000
         time_left = timer - elapsed
 
-        font.render_to(screen, (0, 0), str(time_left), (255, 0, 0))
+        font.render_to(screen, (0, 0), f"Time: {time_left}", (255, 0, 0))
+        font.render_to(screen, (0, 30), f"Health: {player.health}", (255, 0, 0))
 
         if time_left <= 0:
             player.pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
