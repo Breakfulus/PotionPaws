@@ -1,4 +1,5 @@
 import pygame
+import pygame.freetype
 import consts as c
 import random
 from enemy_spawning import get_next_spawn_point
@@ -11,7 +12,11 @@ pygame.init()
 screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 running = True
+STATE = 0
 dt = 0
+timer = (1000 * 2) * 60
+
+font = pygame.freetype.Font("LGGothic.ttf", 30)
 
 # Enemy, player, proj setup
 TEMP_ENEMY = {
@@ -43,8 +48,6 @@ spawn_enemy_event = pygame.event.Event(SPAWN_ENEMY)
 pygame.time.set_timer(spawn_enemy_event, 1000)
 
 player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
-
-STATE = 0
 
 while running:
     if STATE == 0:
@@ -93,6 +96,8 @@ while running:
                 enemy.draw(screen)
             else:
                 enemies.remove(enemy)
+
+        font.render_to(screen, (0, 0), "Hello Wrold!", (255, 0, 0))
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
