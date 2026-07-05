@@ -9,6 +9,20 @@ class Player():
         self.health = self.preset["health"]
         self.alive = True
         self.rect = pygame.rect.Rect(pos[0], pos[1], 30, 30)
+        self.last_hit = 0
+    
+    def apply_damage(self, damage):
+
+        now = pygame.time.get_ticks()
+
+        if (
+            now - self.last_hit >= 0.5 * 1000
+        ):  # Invincibility time; prevents entities from getting hit by same proj twice
+            self.health -= damage
+
+            self.last_hit = (
+                now  # Updates to ost recent time entity was damaged
+            )
 
     def update(self, dt):
         if self.alive:

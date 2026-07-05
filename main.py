@@ -15,7 +15,7 @@ run_start = pygame.time.get_ticks()
 running = True
 STATE = 0
 dt = 0
-timer = 2 * 15
+timer = 2 * 60
 
 font = pygame.freetype.Font("LGGothic.ttf", 30)
 
@@ -95,7 +95,7 @@ while running:
         for enemy in enemies[:]:
             if enemy.alive and player.alive:
                 if enemy.rect.colliderect(player.rect):
-                    player.health -= enemy.damage
+                    player.apply_damage(enemy.damage)
                 enemy.update(player, dt)
                 enemy.draw(screen)
             else:
