@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 run_start = pygame.time.get_ticks()
 running = True
-STATE = 0
+STATE = 1
 dt = 0
 timer = 2 * 60
 
@@ -51,7 +51,7 @@ pygame.time.set_timer(spawn_enemy_event, 1000)
 player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
 
 while running:
-    if STATE == 0:
+    if STATE == 1:
         # Events loop
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -90,7 +90,7 @@ while running:
             player.pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
             enemies = []
             bullets = []
-            STATE = 1
+            STATE = 2
 
         for enemy in enemies[:]:
             if enemy.alive and player.alive:
@@ -112,24 +112,7 @@ while running:
             player.pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
             enemies = []
             bullets = []
-            STATE = 2
-
-        pygame.display.flip()
-        dt = clock.tick(60) / 1000
-
-    if STATE == 1:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    player.alive = True
-                    player.health = player.preset["health"]
-                    run_start = pygame.time.get_ticks()
-                    STATE = 0
-        
-        # Fill the screen
-        screen.fill((255, 0, 0))
+            STATE = 3
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
@@ -138,11 +121,28 @@ while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    player.alive = True
+                    player.health = player.preset["health"]
+                    run_start = pygame.time.get_ticks()
+                    STATE = 1
+        
+        # Fill the screen
+        screen.fill((255, 0, 0))
+
+        pygame.display.flip()
+        dt = clock.tick(60) / 1000
+
+    if STATE == 3:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
             
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     run_start = pygame.time.get_ticks()
-                    STATE = 0
+                    STATE = 1
         
         # Fill the screen
         screen.fill((0, 255, 0))
