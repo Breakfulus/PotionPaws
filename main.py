@@ -6,6 +6,7 @@ from enemy_spawning import get_next_spawn_point
 from projectile import Projectile
 from enemy import Enemy
 from player import Player
+from button import Button
 
 # pygame setup
 pygame.init()
@@ -53,6 +54,8 @@ pygame.time.set_timer(spawn_enemy_event, 1000)
 
 player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
 
+button =  Button((screen.get_width() / 2, screen.get_height() / 2), None, None, None)
+
 while running:
     if STATE == 0:
         for event in pygame.event.get():
@@ -65,6 +68,9 @@ while running:
 
         # Fill the screen
         screen.fill((50, 50, 150))
+
+        button.update(pygame.mouse.get_pos())
+        button.draw(screen)
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
@@ -135,7 +141,7 @@ while running:
             enemies = []
             bullets = []
             STATE = 3
-
+            
         pygame.display.flip()
         dt = clock.tick(60) / 1000
 
