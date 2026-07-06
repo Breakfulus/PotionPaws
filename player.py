@@ -25,7 +25,10 @@ class Player():
             )
     
     def apply_upgrade(self, upgrade):
-        pass
+        for stat, value in upgrade.items():
+            setattr(self, stat, getattr(self, stat) + value)
+            print(f"Stat: {stat}, New Val: {getattr(self, stat)}")
+
 
     def update(self, dt):
         if self.alive:

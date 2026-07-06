@@ -2,8 +2,8 @@ import pygame
 import consts as c
 
 class Button:
-    def __init__(self, pos, image, rect, text, context):
-        self.context = context
+    def __init__(self, pos, image, rect, text, callback):
+        self.callback = callback
         self.pos = pygame.Vector2(pos)
         self.image = image
         self.text = text
@@ -19,12 +19,11 @@ class Button:
         self.is_hovered = False
 
     def clicked(self):
-        click_func = self.context["clicked_effect"]
-        click_func()
+        self.callback()
+
 
     def update(self, mouse_pos):
         self.is_hovered = self.rect.collidepoint(mouse_pos)
-
 
     def draw(self, surf):
         self.rect = self.image.get_rect()
@@ -38,9 +37,9 @@ class Button:
             surf.blit(copy, self.rect)
         
         if self.text:
-            text_rect = pygame.rect.Rect(self.image.get_width() // 2, self.image.get_height() // 2, 30, 30)
-            text_rect.center = (self.image.get_width() // 2, self.image.get_height() // 2)
-            c.GAME_FONT.render_to(self.image, text_rect, self.text, "red")
+            text_rect = c.GAME_FONT.get_rect(self.text)
+            text_rect.center = self.rect.center
+            c.GAME_FONT.render_to(surf, text_rect, self.text, "red")
 
 
 

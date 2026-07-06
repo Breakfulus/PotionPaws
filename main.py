@@ -1,6 +1,7 @@
 import pygame
 import pygame.freetype
 import consts as c
+import upgrades as up
 import random
 from enemy_spawning import get_next_spawn_point
 from projectile import Projectile
@@ -18,7 +19,8 @@ dt = 0
 run_start = pygame.time.get_ticks()
 running = True
 STATE = 0
-timer = 2 * 60
+total_seconds = 2 * 60
+seconds = total_seconds
 
 # Enemy, player, proj setup
 TEMP_ENEMY = {
@@ -42,26 +44,22 @@ TEMP = {
     "speed": 8
 }
 
-def weird_click_test():
-    print("OOP! I was clicked!")
-
-button_context = {
-    "clicked_effect": weird_click_test
-}
-
-enemies = []
-bullets = []
-buttons = [
-    Button((screen.get_width() / 2 - 300, screen.get_height() / 2), None, None, "Test", button_context),
-    Button((screen.get_width() / 2, screen.get_height() / 2), None, None, "Test", button_context),
-    Button((screen.get_width() / 2 + 300, screen.get_height() / 2), None, None, "Test", button_context)
-]
-
 SPAWN_ENEMY = pygame.USEREVENT + 1
 spawn_enemy_event = pygame.event.Event(SPAWN_ENEMY)
 pygame.time.set_timer(spawn_enemy_event, 1000)
 
 player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
+
+enemies = []
+bullets = []
+buttons = [
+    Button((screen.get_width() / 2 - 300, screen.get_height() / 2), None, None, "Speed", callback=lambda: player.apply_upgrade(up.UPGRADES["Swift Brew"])),
+    Button((screen.get_width() / 2, screen.get_height() / 2), None, None, "Damage", callback=lambda: player.apply_upgrade(up.UPGRADES["Damage Elixer"])),
+    Button((screen.get_width() / 2 + 300, screen.get_height() / 2), None, None, "Health", callback=lambda: player.apply_upgrade(up.UPGRADES["Health Potion"]))
+]
+
+paused = True
+
 
 while running:
     if STATE == 0:
@@ -70,13 +68,14 @@ while running:
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_j:
+                    run_start = pygame.time.get_ticks()
+                    paused = False
                     STATE = 1
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in buttons:
                     if button.is_hovered:
                         button.clicked()
             
-
         # Fill the screen
         screen.fill((50, 50, 150))
 
@@ -97,10 +96,13 @@ while running:
                 mouse_pos = pygame.Vector2(pygame.mouse.get_pos())
                 direction = (mouse_pos - player.pos).normalize()
                 projectile = Projectile(TEMP, player.pos, direction, "player")
+                projectile.damage = player.damage
                 bullets.append(projectile)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_j:
+                    pause_time = pygame.time.get_ticks()
+                    paused = True
                     STATE = 0
             
             if event.type == SPAWN_ENEMY:
@@ -141,14 +143,14 @@ while running:
             else:
                 enemies.remove(enemy)
         
-        time_left = timer
-        elapsed = (pygame.time.get_ticks() - run_start) // 1000
-        time_left = timer - elapsed
+        if STATE == 1:
+            if seconds >= 1:
+                seconds -= 1 * dt
 
-        c.GAME_FONT.render_to(screen, (0, 0), f"Time: {time_left}", (255, 0, 0))
+        c.GAME_FONT.render_to(screen, (0, 0), f"Time: {round(seconds)}", (255, 0, 0))
         c.GAME_FONT.render_to(screen, (0, 30), f"Health: {player.health}", (255, 0, 0))
 
-        if time_left <= 0:
+        if seconds <= 0:
             player.pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
             enemies = []
             bullets = []
@@ -165,7 +167,7 @@ while running:
                 if event.key == pygame.K_SPACE:
                     player.alive = True
                     player.health = player.preset["health"]
-                    run_start = pygame.time.get_ticks()
+                    seconds = total_seconds
                     STATE = 1
         
         # Fill the screen
@@ -181,7 +183,7 @@ while running:
             
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    run_start = pygame.time.get_ticks()
+                    seconds = total_seconds
                     STATE = 1
         
         # Fill the screen

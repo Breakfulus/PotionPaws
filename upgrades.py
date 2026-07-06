@@ -1,5 +1,5 @@
 UPGRADES = {
-    "Sift Brew": {
+    "Swift Brew": {
         "speed": 10
     },
     "Damage Elixer": {
