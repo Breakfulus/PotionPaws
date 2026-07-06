@@ -23,6 +23,9 @@ class Player():
             self.last_hit = (
                 now  # Updates to ost recent time entity was damaged
             )
+    
+    def apply_upgrade(self, upgrade):
+        pass
 
     def update(self, dt):
         if self.alive:

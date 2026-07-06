@@ -2,7 +2,8 @@ import pygame
 import consts as c
 
 class Button:
-    def __init__(self, pos, image, rect, text):
+    def __init__(self, pos, image, rect, text, context):
+        self.context = context
         self.pos = pygame.Vector2(pos)
         self.image = image
         self.text = text
@@ -17,20 +18,13 @@ class Button:
         self.text = text
         self.is_hovered = False
 
-    def check_if_hovered(self, mouse_pos):
-        if mouse_pos:
-            is_coliding = self.rect.collidepoint(mouse_pos)
-
-            if is_coliding:
-                self.is_hovered = True
-            else:
-                self.is_hovered = False
-
     def clicked(self):
-        pass
+        click_func = self.context["clicked_effect"]
+        click_func()
 
     def update(self, mouse_pos):
-        self.check_if_hovered(mouse_pos)
+        self.is_hovered = self.rect.collidepoint(mouse_pos)
+
 
     def draw(self, surf):
         self.rect = self.image.get_rect()

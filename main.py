@@ -42,12 +42,19 @@ TEMP = {
     "speed": 8
 }
 
+def weird_click_test():
+    print("OOP! I was clicked!")
+
+button_context = {
+    "clicked_effect": weird_click_test
+}
+
 enemies = []
 bullets = []
 buttons = [
-    Button((screen.get_width() / 2, screen.get_height() / 2), None, None, "Test"),
-    Button((screen.get_width() / 2 - 300, screen.get_height() / 2), None, None, "Test"),
-    Button((screen.get_width() / 2 + 300, screen.get_height() / 2), None, None, "Test")
+    Button((screen.get_width() / 2 - 300, screen.get_height() / 2), None, None, "Test", button_context),
+    Button((screen.get_width() / 2, screen.get_height() / 2), None, None, "Test", button_context),
+    Button((screen.get_width() / 2 + 300, screen.get_height() / 2), None, None, "Test", button_context)
 ]
 
 SPAWN_ENEMY = pygame.USEREVENT + 1
@@ -64,6 +71,10 @@ while running:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_j:
                     STATE = 1
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for button in buttons:
+                    if button.is_hovered:
+                        button.clicked()
             
 
         # Fill the screen
