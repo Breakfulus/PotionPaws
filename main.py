@@ -20,9 +20,6 @@ running = True
 STATE = 0
 timer = 2 * 60
 
-# Define font
-font = pygame.freetype.Font("LGGothic.ttf", 30)
-
 # Enemy, player, proj setup
 TEMP_ENEMY = {
     "image": None,
@@ -47,14 +44,17 @@ TEMP = {
 
 enemies = []
 bullets = []
+buttons = [
+    Button((screen.get_width() / 2, screen.get_height() / 2), None, None, "Test"),
+    Button((screen.get_width() / 2 - 300, screen.get_height() / 2), None, None, "Test"),
+    Button((screen.get_width() / 2 + 300, screen.get_height() / 2), None, None, "Test")
+]
 
 SPAWN_ENEMY = pygame.USEREVENT + 1
 spawn_enemy_event = pygame.event.Event(SPAWN_ENEMY)
 pygame.time.set_timer(spawn_enemy_event, 1000)
 
 player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
-
-button =  Button((screen.get_width() / 2, screen.get_height() / 2), None, None, None)
 
 while running:
     if STATE == 0:
@@ -69,8 +69,9 @@ while running:
         # Fill the screen
         screen.fill((50, 50, 150))
 
-        button.update(pygame.mouse.get_pos())
-        button.draw(screen)
+        for button in buttons:
+            button.update(pygame.mouse.get_pos())
+            button.draw(screen)
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
@@ -133,8 +134,8 @@ while running:
         elapsed = (pygame.time.get_ticks() - run_start) // 1000
         time_left = timer - elapsed
 
-        font.render_to(screen, (0, 0), f"Time: {time_left}", (255, 0, 0))
-        font.render_to(screen, (0, 30), f"Health: {player.health}", (255, 0, 0))
+        c.GAME_FONT.render_to(screen, (0, 0), f"Time: {time_left}", (255, 0, 0))
+        c.GAME_FONT.render_to(screen, (0, 30), f"Health: {player.health}", (255, 0, 0))
 
         if time_left <= 0:
             player.pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
