@@ -16,10 +16,8 @@ clock = pygame.time.Clock()
 dt = 0
 
 # Game setup
-run_start = pygame.time.get_ticks()
 running = True
-STATE = 1
-total_seconds = 5 * 60
+total_seconds = .1 * 60
 seconds = total_seconds
 
 # Enemy, player, proj setup
@@ -52,34 +50,64 @@ player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
 
 enemies = []
 bullets = []
-buttons = [
+
+def start_game():
+    print("Game Starting...")
+    player.reset_player()
+    c.STATE = 1
+
+main_menu_buttons = [
+    Button((screen.get_width() / 2, screen.get_height() / 2), None, "Start Game", callback=lambda: start_game(), size=(300, 100))
+]
+
+upgrade_buttons = [
     Button((screen.get_width() / 2 - 300, screen.get_height() / 2), None, "Speed", callback=lambda: player.apply_upgrade(up.UPGRADES["Swift Brew"]), size=(250, 400)),
     Button((screen.get_width() / 2, screen.get_height() / 2), None, "Damage", callback=lambda: player.apply_upgrade(up.UPGRADES["Damage Elixer"]), size=(250, 400)),
     Button((screen.get_width() / 2 + 300, screen.get_height() / 2), None, "Health", callback=lambda: player.apply_upgrade(up.UPGRADES["Health Potion"]), size=(250, 400)),
 ]
 
-
 while running:
+
+    # Main Menu
+    if c.STATE == 0:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for button in main_menu_buttons:
+                    if button.is_hovered:
+                        button.clicked()
+            
+        # Fill the screen
+        screen.fill((50, 50, 150))
+
+        for button in main_menu_buttons:
+            button.update(pygame.mouse.get_pos())
+            button.draw(screen)
+
+        pygame.display.flip()
+        dt = clock.tick(60) / 1000
+
     # Upgrade Screen
-    if STATE == 0:
+    if c.STATE == 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_j:
                     run_start = pygame.time.get_ticks()
-                    STATE = 1
+                    c.STATE = 2
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for button in buttons:
+                for button in upgrade_buttons:
                     if button.is_hovered:
                         button.clicked()
                         player.needs_upgrade = False
-                        STATE = 1
+                        c.STATE = 2
             
         # Fill the screen
         screen.fill((50, 50, 150))
 
-        for button in buttons:
+        for button in upgrade_buttons:
             button.update(pygame.mouse.get_pos())
             button.draw(screen)
 
@@ -87,7 +115,7 @@ while running:
         dt = clock.tick(60) / 1000
 
     # Game Screen
-    if STATE == 1:
+    if c.STATE == 2:
         # Events loop
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -106,7 +134,7 @@ while running:
                 pygame.time.set_timer(spawn_enemy_event, 1000 * random.randint(1, 5))
             
             if player.needs_upgrade:
-                STATE = 0
+                c.STATE = 1
             
         # Fill the screen
         screen.fill((26, 27, 33))
@@ -131,7 +159,7 @@ while running:
             player.reset_player()
             enemies = []
             bullets = []
-            STATE = 2
+            c.STATE = 3
 
         for enemy in enemies[:]:
             if enemy.alive and player.alive:
@@ -142,8 +170,8 @@ while running:
             else:
                 enemies.remove(enemy)
         
-        if STATE == 1:
-            if seconds >= 1:
+        if c.STATE == 2:
+            if seconds >= 0:
                 seconds -= 1 * dt
 
         c.GAME_FONT.render_to(screen, (0, 0), f"Time: {round(seconds)}", (255, 0, 0))
@@ -155,13 +183,13 @@ while running:
             player.pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
             enemies = []
             bullets = []
-            STATE = 3
+            c.STATE = 4
             
         pygame.display.flip()
         dt = clock.tick(60) / 1000
 
     # Loss Screen
-    if STATE == 2:
+    if c.STATE == 3:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -169,16 +197,20 @@ while running:
                 if event.key == pygame.K_SPACE:
                     player.reset_player()
                     seconds = total_seconds
-                    STATE = 1
+                    c.STATE = 0
         
         # Fill the screen
-        screen.fill((255, 0, 0))
+        screen.fill((26, 27, 33))
+        text = f"You lost. Space to return to menu."
+        text_rect = c.GAME_FONT.get_rect(text)
+        text_rect.center = (c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2)
+        c.GAME_FONT.render_to(screen, text_rect, text, (255, 0, 0))
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
 
     # Win Screen
-    if STATE == 3:
+    if c.STATE == 4:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -186,10 +218,15 @@ while running:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     seconds = total_seconds
-                    STATE = 1
+                    c.STATE = 0
         
         # Fill the screen
-        screen.fill((0, 255, 0))
+        screen.fill((26, 27, 33))
+
+        text = f"You Won. Space to return to menu."
+        text_rect = c.GAME_FONT.get_rect(text)
+        text_rect.center = (c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2)
+        c.GAME_FONT.render_to(screen, text_rect, text, (255, 0, 0))
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
