@@ -6,4 +6,4 @@ SCREEN_HEIGHT = 720
 STATE = 0
 
 # Define font
-GAME_FONT = pygame.freetype.Font("LGGothic.ttf", 30)
+GAME_FONT = pygame.freetype.Font("data/LGGothic.ttf", 30)

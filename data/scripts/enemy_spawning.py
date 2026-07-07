@@ -1,5 +1,5 @@
 import random
-import consts as c
+import data.scripts.consts as c
 
 def get_possible_spawn_points():
     points = []

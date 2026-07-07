@@ -1,5 +1,5 @@
 import pygame
-import consts as c
+import data.scripts.consts as c
 
 class Button:
     def __init__(self, pos, image, text, callback, size=(0, 0)):

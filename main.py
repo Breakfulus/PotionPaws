@@ -1,13 +1,13 @@
 import pygame
 import pygame.freetype
-import consts as c
-import upgrades as up
+import data.scripts.consts as c
+import data.scripts.upgrades as up
 import random
-from enemy_spawning import get_next_spawn_point
-from projectile import Projectile
-from enemy import Enemy
-from player import Player
-from button import Button
+from data.scripts.enemy_spawning import get_next_spawn_point
+from data.scripts.projectile import Projectile
+from data.scripts.enemy import Enemy
+from data.scripts.player import Player
+from data.scripts.button import Button
 
 # pygame setup
 pygame.init()
@@ -18,7 +18,7 @@ dt = 0
 
 # Game setup
 running = True
-total_seconds = .1 * 60
+total_seconds = 5 * 60
 seconds = total_seconds
 
 # Enemy, player, proj setup
