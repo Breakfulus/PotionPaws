@@ -2,7 +2,7 @@ import pygame
 import consts as c
 
 class Button:
-    def __init__(self, pos, image, rect, text, callback):
+    def __init__(self, pos, image, text, callback, size=(0, 0)):
         self.callback = callback
         self.pos = pygame.Vector2(pos)
         self.image = image
@@ -10,7 +10,7 @@ class Button:
 
         # If button doesnt have an image then create placeholder surf
         if self.image == None:
-            img = pygame.Surface((250, 400))
+            img = pygame.Surface(size)
             img.fill((25, 25, 50))
             self.image = img
 

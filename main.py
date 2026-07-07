@@ -19,7 +19,7 @@ dt = 0
 run_start = pygame.time.get_ticks()
 running = True
 STATE = 1
-total_seconds = 2 * 60
+total_seconds = 5 * 60
 seconds = total_seconds
 
 # Enemy, player, proj setup
@@ -53,13 +53,14 @@ player = Player((screen.get_width() / 2, screen.get_height() / 2), TEMP_PLAYER)
 enemies = []
 bullets = []
 buttons = [
-    Button((screen.get_width() / 2 - 300, screen.get_height() / 2), None, None, "Speed", callback=lambda: player.apply_upgrade(up.UPGRADES["Swift Brew"])),
-    Button((screen.get_width() / 2, screen.get_height() / 2), None, None, "Damage", callback=lambda: player.apply_upgrade(up.UPGRADES["Damage Elixer"])),
-    Button((screen.get_width() / 2 + 300, screen.get_height() / 2), None, None, "Health", callback=lambda: player.apply_upgrade(up.UPGRADES["Health Potion"]))
+    Button((screen.get_width() / 2 - 300, screen.get_height() / 2), None, "Speed", callback=lambda: player.apply_upgrade(up.UPGRADES["Swift Brew"]), size=(250, 400)),
+    Button((screen.get_width() / 2, screen.get_height() / 2), None, "Damage", callback=lambda: player.apply_upgrade(up.UPGRADES["Damage Elixer"]), size=(250, 400)),
+    Button((screen.get_width() / 2 + 300, screen.get_height() / 2), None, "Health", callback=lambda: player.apply_upgrade(up.UPGRADES["Health Potion"]), size=(250, 400)),
 ]
 
 
 while running:
+    # Upgrade Screen
     if STATE == 0:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -85,6 +86,7 @@ while running:
         pygame.display.flip()
         dt = clock.tick(60) / 1000
 
+    # Game Screen
     if STATE == 1:
         # Events loop
         for event in pygame.event.get():
@@ -156,6 +158,7 @@ while running:
         pygame.display.flip()
         dt = clock.tick(60) / 1000
 
+    # Loss Screen
     if STATE == 2:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -172,6 +175,7 @@ while running:
         pygame.display.flip()
         dt = clock.tick(60) / 1000
 
+    # Win Screen
     if STATE == 3:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
