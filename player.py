@@ -11,6 +11,9 @@ class Player():
         self.needs_upgrade = True
         self.rect = pygame.rect.Rect(pos[0], pos[1], 30, 30)
         self.last_hit = 0
+        self.level = 0
+        self.exp = 0
+        self.exp_til_level_up = 100
     
     def apply_damage(self, damage):
 
@@ -36,9 +39,21 @@ class Player():
             setattr(self, stat, getattr(self, stat) + value)
             print(f"Stat: {stat}, New Val: {getattr(self, stat)}")
 
+    def gain_exp(self, amount):
+        if self.exp <= self.exp_til_level_up -1:
+            self.exp += amount
+
+        print(self.exp)
+
 
     def update(self, dt):
         if self.alive:
+
+            if self.exp >= self.exp_til_level_up:
+                self.exp = self.exp - self.exp_til_level_up
+                self.level += 1
+                self.exp_til_level_up = (self.level + 1) * 100
+                self.needs_upgrade = True
 
             if self.health <= 0:
                 self.alive = False

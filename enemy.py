@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class Enemy():
     def __init__(self, description, pos) -> None:
@@ -14,6 +15,7 @@ class Enemy():
     def update(self, player, dt):
         if self.alive:
             if self.health <= 0:
+                player.gain_exp(random.randint(5, 25))
                 self.alive = False
             direction = (player.pos - self.pos).normalize()
             self.velocity = direction * self.speed

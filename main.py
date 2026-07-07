@@ -32,9 +32,9 @@ TEMP_ENEMY = {
 
 TEMP_PLAYER = {
     "image": None,
-    "health": 100,
+    "health": 50,
     "damage": 10,
-    "speed": 170
+    "speed": 125
 }
 
 TEMP = {
@@ -148,6 +148,8 @@ while running:
 
         c.GAME_FONT.render_to(screen, (0, 0), f"Time: {round(seconds)}", (255, 0, 0))
         c.GAME_FONT.render_to(screen, (0, 30), f"Health: {player.health}", (255, 0, 0))
+        c.GAME_FONT.render_to(screen, (0, 60), f"Level: {player.level}", (255, 0, 0))
+        c.GAME_FONT.render_to(screen, (0, 90), f"EXP: {player.exp}/{player.exp_til_level_up}", (255, 0, 0))
 
         if seconds <= 0:
             player.pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
