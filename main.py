@@ -12,6 +12,7 @@ from button import Button
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
+pygame.display.set_caption("PotionPaws PROTOTYPE v0.1.0")
 clock = pygame.time.Clock()
 dt = 0
 
