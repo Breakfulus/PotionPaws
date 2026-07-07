@@ -18,7 +18,7 @@ dt = 0
 # Game setup
 run_start = pygame.time.get_ticks()
 running = True
-STATE = 0
+STATE = 1
 total_seconds = 2 * 60
 seconds = total_seconds
 
@@ -58,8 +58,6 @@ buttons = [
     Button((screen.get_width() / 2 + 300, screen.get_height() / 2), None, None, "Health", callback=lambda: player.apply_upgrade(up.UPGRADES["Health Potion"]))
 ]
 
-paused = True
-
 
 while running:
     if STATE == 0:
@@ -69,12 +67,13 @@ while running:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_j:
                     run_start = pygame.time.get_ticks()
-                    paused = False
                     STATE = 1
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in buttons:
                     if button.is_hovered:
                         button.clicked()
+                        player.needs_upgrade = False
+                        STATE = 1
             
         # Fill the screen
         screen.fill((50, 50, 150))
@@ -98,17 +97,14 @@ while running:
                 projectile = Projectile(TEMP, player.pos, direction, "player")
                 projectile.damage = player.damage
                 bullets.append(projectile)
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_j:
-                    pause_time = pygame.time.get_ticks()
-                    paused = True
-                    STATE = 0
             
             if event.type == SPAWN_ENEMY:
                 new_enemy = Enemy(TEMP_ENEMY, get_next_spawn_point())
                 enemies.append(new_enemy)
                 pygame.time.set_timer(spawn_enemy_event, 1000 * random.randint(1, 5))
+            
+            if player.needs_upgrade:
+                STATE = 0
             
         # Fill the screen
         screen.fill((26, 27, 33))
@@ -130,6 +126,7 @@ while running:
             player.draw(screen)
         else:
             player.pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+            player.reset_player()
             enemies = []
             bullets = []
             STATE = 2
@@ -165,8 +162,7 @@ while running:
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    player.alive = True
-                    player.health = player.preset["health"]
+                    player.reset_player()
                     seconds = total_seconds
                     STATE = 1
         

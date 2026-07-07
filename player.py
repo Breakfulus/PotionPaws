@@ -8,6 +8,7 @@ class Player():
         self.damage = self.preset["damage"]
         self.health = self.preset["health"]
         self.alive = True
+        self.needs_upgrade = True
         self.rect = pygame.rect.Rect(pos[0], pos[1], 30, 30)
         self.last_hit = 0
     
@@ -23,7 +24,13 @@ class Player():
             self.last_hit = (
                 now  # Updates to ost recent time entity was damaged
             )
-    
+
+    def reset_player(self):
+        self.speed = self.preset["speed"]
+        self.damage = self.preset["damage"]
+        self.health = self.preset["health"]
+        self.alive = True
+
     def apply_upgrade(self, upgrade):
         for stat, value in upgrade.items():
             setattr(self, stat, getattr(self, stat) + value)
